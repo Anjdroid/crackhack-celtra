@@ -5,7 +5,7 @@ var options = {
 }
 
 var pgp = require('pg-promise')(options)
-var db = pgp("postgres://user:user@localhost:5432/postgres")
+var db = pgp("postgres://postgres:pass@localhost:5432/postgres")
 
 function getEmployees(_, res, next) {
     db.any('select * from employees').then(function (data) {

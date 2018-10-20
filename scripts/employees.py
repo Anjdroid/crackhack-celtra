@@ -58,4 +58,4 @@ def parseEmployee(employee, managerId, fakeUsers):
 users = getFakeUsers()
 current = len(users)
 parseEmployee(data, None, users)
-print current - len(users)
+# print current - len(users)
