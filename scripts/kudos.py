@@ -3,7 +3,7 @@ import requests
 import random
 
 employeeUrl = "http://localhost:5000/api/employees"
-kudosUrl = "http://localhost:5001/api/kudos"
+kudosUrl = "http://localhost:5003/api/kudos"
 
 with open('schema.json') as f:
     data = json.load(f)

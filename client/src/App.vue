@@ -1,43 +1,56 @@
 <template>
   <div id="app">
-    <div v-if="!isLoading">
-      <div class="group mananger">
-        <p class="role">MANAGER</p>
-        <transition name="slide-fade">
-          <user @click.native="setActiveUser(manager.id, manager.managerId)" :user-id="manager.id" v-if="!!manager" :key="`manager-${manager.id}`"/>
-        </transition>
-      </div>
-      <div class="group">
-        <p class="role">{{ selectedUser.department || "&nbsp;" | uppercase}}</p>
-        <transition name="slide-fade">
-          <div class="current" :key="`manager-${manager.id}`">
-            <user @click.native="getUser(subordinate)" class="current--subordinate" 
-                :status="subordinate == selectedUser.id" :user-id="subordinate"
-                v-for="subordinate in manager.subordinates"
-                :key="subordinate.id"/>
-          </div>
-        </transition>
-      </div>
-      <div class="group">
-        <p class="role">SUBORDINATES</p>
-        <transition name="slide-fade">
-          <div class="subordinates" v-if="selectedUser.subordinates.length > 0" :key="`subordinates-${selectedUser.id}`">
-              <user @click.native="setActiveUser(subordinate, selectedUser.id)" :user-id="subordinate" v-for="subordinate in selectedUser.subordinates" :key="subordinate.id" class="subordinate"/>
-          </div>
-        </transition>
-      </div>
-    </div>
+    <div class="w3-sidebar w3-text-white sidebar w3-purple w3-bar-block sides" id="mySidebar">
+          <a href=""><span>My profile</span></a>
+          <a href="" style="color: lightgray"><span>Visualization</span></a>
+        </div>
+
+        <user user-id="userId"></user>
+
+        <div class="w3-main w3-container" >
+            <div class="w3-container" style="margin-left:230px; margin-top: 30px; text-align: justify;" >
+              <div class="one"><img src="pics/profile.jpg"></div>
+              <div class="two">
+                <h3><b>{{ `${selectedUser.firstName} ${selectedUser.lastName}` }}</b></h3>
+              <ul class="info">
+                <li>Celtra Ljubljana.</li>
+                <li>Project manager.</li>
+                <li>Always ready to help!</li>
+              </ul>
+            </div>
+            <h3><b>My projects</b></h3>
+            <div class="buttons">
+              <button>#celtra</button>
+              <button>#slack</button>
+              <button>#hackathon</button>
+            </div>
+            <h3><b>Received kudos</b></h3>
+              <ul class="info recieved">
+                <li><img src="pics/profile2.jpg"> <a href="">#hackathon</a>Your ideas were really helpful! Many thanks!</li>
+                <li><img src="pics/profile3.jpg"> <a href="">#celtra</a>Thank you for your help with database!</li>
+                <li><img src="pics/profile2.jpg"> <a href="">#hackathon</a>With your knowledge we are able to save so much time!</li>
+              </ul>
+            <h3><b>Given kudos</b></h3>
+              <ul class="info recieved">
+                <li><img src="pics/profile4.jpg"> <a href="">#celtra</a>Thank you for your help with frontend!</li>
+                <li><img src="pics/profile3.jpg"> <a href="">#hackathon</a>With your skills we are able to save so much time!</li>
+                <li><img src="pics/profile2.jpg"> <a href="">#hackathon</a>Your ideas were really helpful! So grateful!</li>
+              </ul>
+            </div>
+        </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import User from './User'
+import Kudos from './Kudos'
 
 export default {
   name: 'app',
   components: {
-    'user' : User
+    'user' : User,
+    'kudos' : Kudos
   },
   data () {
     return {
@@ -48,6 +61,7 @@ export default {
     }
   },
   mounted () {
+  // tuki greš iskat u bazo stvari, potem jih bindaš na this.neki(npr. product)
     var that = this
 
     axios.get(`/api/boss`).then(function (response) {
@@ -55,6 +69,7 @@ export default {
 
       axios.get(`/api/employees/${that.rootId}`).then(function (response) {
         that.manager = response.data
+        that.userId = response.data.subordinates[0];
         that.getUser(response.data.subordinates[0])
       })
     })

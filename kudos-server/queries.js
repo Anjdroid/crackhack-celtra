@@ -5,7 +5,7 @@ var options = {
 }
 
 var pgp = require('pg-promise')(options)
-var db = pgp("postgres://user:user@localhost:5433/postgres")
+var db = pgp("postgres://postgres:pass@localhost:5432/postgres")
 
 function getKudos(req, res, next) {
     var query = 'select * from kudos'

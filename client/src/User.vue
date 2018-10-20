@@ -15,7 +15,7 @@
 <script>
 import axios from 'axios'
 import User from './User'
-import Kudos from './Kudos'
+import Kudos from './Kudos' // to kar tle importaš morš dodat v components spodi
 
 export default {
   name: 'user',
