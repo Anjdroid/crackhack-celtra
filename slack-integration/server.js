@@ -10,7 +10,6 @@ const axios = require('axios');
 const bodyParser = require('body-parser');
 const qs = require('querystring');
 const kudos = require('./kudos');
-const users = require('./users');
 
 const app = express()
 
@@ -60,6 +59,7 @@ app.get('/oauth', function(req, res) {
 
 app.post('/kudos', function(req, res) {
     const { text, trigger_id } = req.body;
+    console.log("LOL");
 
     // create dialog for kudos
     const dialog = {
@@ -116,9 +116,4 @@ app.post('/interactive', (req, res) => {
    res.send('');
   // create kudos
   kudos.create(body.user.id, body.submission);
-});
-
-
-app.post('/testCommand', function(req, res) {
-    res.send('Receiving your test command!');
 });
