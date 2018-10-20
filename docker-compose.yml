@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  hackaton-employees:
+    image: postgres:10.4
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=user
+    volumes:
+      - ./db/employees/base.sql:/docker-entrypoint-initdb.d/base.sql
+
+  hackaton-kudos:
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5433:5432
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=user
+    volumes:
+      - ./db/kudos/base.sql:/docker-entrypoint-initdb.d/base.sql

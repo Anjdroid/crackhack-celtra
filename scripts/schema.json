@@ -1,0 +1,158 @@
+{
+    "jobTitle": "Founder & CEO",
+    "subordinates" : [
+        {
+            "jobTitle": "CTO"
+        },
+        {
+            "jobTitle": "COO",
+            "subordinates" : [
+                {
+                    "jobTitle": "Director of Enginering",
+                    "department": "Ad Delivery",
+                    "subordinates" : [
+                        {
+                            "jobTitle": "Sr. Software Developer",
+                            "department": "Ad Delivery",
+                            "count" : 3
+                        },
+                        {
+                            "jobTitle": "Software Developer",
+                            "department": "Ad Delivery",
+                            "count" : 2
+                        },
+                        {
+                            "jobTitle": "Software Development Intern",
+                            "department": "Ad Delivery"
+                        }
+                    ]
+                },
+                {
+                    "jobTitle": "Director of Enginering",
+                    "department": "Quality Assurance",
+                    "subordinates" : [
+                        {
+                            "jobTitle": "Sr. QA Engineer",
+                            "department": "Quality Assurance",
+                            "count" : 3
+                        },
+                        {
+                            "jobTitle": "QA Engineer",
+                            "department": "Quality Assurance",
+                            "count" : 2
+                        },
+                        {
+                            "jobTitle": "Lead QA Engineer",
+                            "department": "Quality Assurance",
+                            "subordinates" : [
+                                {
+                                    "jobTitle": "Test Automation Engineer",
+                                    "department": "Quality Assurance",
+                                    "count" : 3
+                                },
+                                {
+                                    "jobTitle": "QA Engineer",
+                                    "department": "Quality Assurance",
+                                    "count" : 4
+                                },
+                                {
+                                    "jobTitle": "Jr. QA Engineer",
+                                    "department": "Quality Assurance"
+                                },
+                                {
+                                    "jobTitle": "QA Engineer Intern",
+                                    "department": "Quality Assurance",
+                                    "count" : 2
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "jobTitle": "SVP of Enginering",
+                    "department": "Authoring Tools",
+                    "subordinates" : [
+                        {
+                            "jobTitle": "Sr. Software Developer",
+                            "department": "Authoring Tools",
+                            "count" : 2
+                        },
+                        {
+                            "jobTitle": "Lead Software Developer",
+                            "department": "Authoring Tools",
+                            "count" : 3
+                        },
+                        {
+                            "jobTitle": "Software Developer",
+                            "department": "Authoring Tools"
+                        },
+                        {
+                            "jobTitle": "Sr. Software Developer",
+                            "department": "Authoring Tools",
+                            "subordinates" : [
+                                {
+                                    "jobTitle": "Software Developer",
+                                    "department": "Authoring Tools",
+                                    "count" : 3
+                                },
+                                {
+                                    "jobTitle": "Jr. Software Developer",
+                                    "department": "Authoring Tools"
+                                },
+                                {
+                                    "jobTitle": "Software Engineer Intern",
+                                    "department": "Authoring Tools"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "jobTitle": "Lead DevOps Engineer",
+                    "department": "DevOps",
+                    "subordinates" : [
+                        {
+                            "jobTitle": "Sr. DevOps Engineer",
+                            "department": "DevOps",
+                            "count" : 3
+                        },
+                        {
+                            "jobTitle": "Jr. DevOps Engineer",
+                            "department": "DevOps",
+                            "count" : 2
+                        },
+                        {
+                            "jobTitle": "DevOps Engineer Intern",
+                            "department": "DevOps"
+                        }
+                    ]
+                },
+                {
+                    "jobTitle": "VP of Enginering",
+                    "department": "Dashboard",
+                    "subordinates" : [
+                        {
+                            "jobTitle": "Lead Software Developer",
+                            "department": "Dashboard"
+                        },
+                        {
+                            "jobTitle": "Sr. Software Developer",
+                            "department": "Dashboard",
+                            "count" : 2
+                        },
+                        {
+                            "jobTitle": "Software Developer",
+                            "department": "Dashboard",
+                            "count" : 3
+                        },
+                        {
+                            "jobTitle": "Software Engineer Intern",
+                            "department": "Dashboard",
+                            "count" : 2
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
