@@ -14,9 +14,6 @@ body{
    width:230px;
 }
 
-.pics {
-    
-}
 
 .buttons button {
     background-color: #4c9689;
@@ -80,4 +77,48 @@ body{
 .received {
 	list-style: none;
 	margin-left: -20px;
+}
+
+.sides2 a {
+	margin: 25px 35px 0px 35px;
+    display: block;
+    text-decoration: none;
+    color: black;
+    font-size: 24px;
+}
+
+.info2 li{
+	margin-bottom: 20px;
+	margin-left: 10px;
+}
+
+.received2 a{
+	color: #3480bb;
+	text-decoration: none;
+	margin: 5px 5px;
+	font-size: 16px;
+}
+
+.received2 img {
+	width: 20%;
+	border-radius: 5%;
+	margin-left: 10px;
+}
+
+.received2 b{
+	padding: 20px; 
+	font-size: 18px;
+}
+
+.received2 {
+	list-style: none;
+	margin-left: -20px;
+}
+
+#graph-container {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
 }

@@ -10,7 +10,6 @@ const axios = require('axios');
 const bodyParser = require('body-parser');
 const qs = require('querystring');
 const kudos = require('./kudos');
-const users = require('./users');
 
 const app = express()
 
@@ -43,9 +42,9 @@ app.get('/oauth', function(req, res) {
         console.log("Looks like we're not getting code.");
     } else {
         request({
-            url: 'https://slack.com/api/oauth.access', //URL to hit
-            qs: {code: req.query.code, client_id: clientId, client_secret: clientSecret}, //Query string data
-            method: 'GET', //Specify the method
+            url: 'https://slack.com/api/oauth.access',
+            qs: {code: req.query.code, client_id: clientId, client_secret: clientSecret},
+            method: 'GET', 
 
         }, function (error, response, body) {
             if (error) {
@@ -58,13 +57,11 @@ app.get('/oauth', function(req, res) {
     }
 });
 
-// Route the endpoint that our slash command will point to and send back a simple response to indicate that ngrok is working
-app.post('/command', function(req, res) {
-    //console.log(text)
-    //console.log(trigger_id)
-    console.log(req.body)
+app.post('/kudos', function(req, res) {
     const { text, trigger_id } = req.body;
+    console.log("LOL");
 
+    // create dialog for kudos
     const dialog = {
       token: token,
       trigger_id,
@@ -78,7 +75,7 @@ app.post('/command', function(req, res) {
             type: 'text',
             name: 'text',
             value: text,
-            hint: 'Thank you for working.',
+            hint: 'Write something nice about your fellow co-worker.',
           },
           {
             label: 'Description',
@@ -101,42 +98,22 @@ app.post('/command', function(req, res) {
         ],
       }),
     };
-    //console.log("before show DIALOG PLS")
 
+    // open dialog for creating kudos
     axios.post('https://slack.com/api/dialog.open', qs.stringify(dialog))
       .then((result) => {
-        //debug('dialog.open: %o', result.data);
-        //console.log("SHOW DIALOG PLS")
-        //console.log(result.data)
         res.send('');
       }).catch((err) => {
-        //debug('dialog.open call failed: %o', err);
         console.log("500")
         res.sendStatus(500);
       });
   
 });
 
+// create kudos and send it as a message using the interactive slack component
 app.post('/interactive', (req, res) => {
   const body = JSON.parse(req.body.payload);
-
-  //console.log("form submission YES ", body.submission.trigger_id)
-
-
-    // immediately respond with a empty 200 response to let
-    // Slack know the command was received
-    res.send('');
-
-    // create KUDOS
-    console.log("BODY ", body);
-    kudos.create(body.user.id, body.submission);
-  //} else {
-    //debug('Token mismatch');
-   //res.sendStatus(404);
-  //}
-});
-
-
-app.post('/testCommand', function(req, res) {
-    res.send('Receiving your test command!');
+   res.send('');
+  // create kudos
+  kudos.create(body.user.id, body.submission);
 });
