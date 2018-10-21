@@ -17,11 +17,13 @@
       <Kudos/>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
 import User from './User'
 import Kudos from './Kudos'
+
 
 export default {
   name: 'App',
@@ -46,7 +48,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  
-</style>

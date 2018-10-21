@@ -22,6 +22,8 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
+
   export default {
   name: 'Kudos',
   data () {
@@ -29,10 +31,41 @@
       rootId: null,
       manager: {},
       selectedUser: {},
-      isLoading: true
+      isLoading: true,
+      allUsers: {},
+      userNames: [],
+      userImages: [],
+      teamMembers: []
+    }
+  },
+  methods: {
+    getAllUsers() {
+      axios.get(`/api/employees/`).then(function (response) {
+         this.allUsers = response.data
+         console.log("response ", response.data)
+         for(var i = 0; i < this.allUsers.length; i++) {
+          //console.log("zdej sm v foru ")
+          this.userNames.push(this.allUsers[i].firstName +" "+ this.allUsers[i].lastName)
+          this.userImages.push(this.allUsers[i].avatarUrl)
+          //console.log("ime ", this.allUsers[i].firstName +" "+ this.allUsers[i].lastName)
+          //console.log("avatar ", this.allUsers[i].avatarUrl)
+
+          // MANAGER ID:
+          var manager_id = "0be23e70-2304-4737-abc5-2f8055e9d801"
+          if(this.allUsers[i].managerId === manager_id) {
+            this.teamMembers.push(this.allUsers[i])
+          }
+         }
+      }.bind(this))
+    },
+    getAllManagers() {
+      //axios.get(`/api/employees/`).then(function (response) {
     }
   },
   mounted () {
+    var that = this
+    that.getAllUsers()
+
     sigma.utils.pkg('sigma.canvas.nodes');
     sigma.canvas.nodes.image = (function() {
       var _cache = {},
@@ -184,5 +217,6 @@
       });
     }
   }
+
 </script>
 

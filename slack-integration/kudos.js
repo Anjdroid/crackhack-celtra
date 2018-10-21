@@ -10,7 +10,7 @@ const options = {
 };
 
 const pgp = require('pg-promise')(options);
-const db = pgp("postgres://pad-por:pad-por@localhost:5432/postgres");
+const db = pgp("postgres://postgres:pass@localhost:5432/postgres");
 
 const sendKudosAsMessage = (kudos) => {
 
@@ -18,7 +18,6 @@ const sendKudosAsMessage = (kudos) => {
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: token,
     channel: kudos.project,
-    as_user: true,
     text: `<@${kudos.toWho}> received kudos from <@${kudos.userId}>!`,
     attachments: JSON.stringify([
       {
@@ -49,7 +48,6 @@ const sendKudosAsMessage = (kudos) => {
   axios.post('https://slack.com/api/chat.postMessage', qs.stringify({
     token: token,
     channel: kudos.toWho,
-    as_user: true,
     text: `You received kudos from <@${kudos.userId}>!`,
     attachments: JSON.stringify([
       {
