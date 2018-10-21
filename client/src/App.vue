@@ -1,3 +1,4 @@
+
 <template>
   <div id="app">
     <div class="w3-sidebar w3-text-white sidebar w3-purple w3-bar-block sides" id="mySidebar">
@@ -5,7 +6,7 @@
           <a href="" style="color: lightgray"><span>Visualization</span></a>
         </div>
 
-        <user user-id="userId"></user>
+        <!--user user-id="userId"></user-->
 
         <div class="w3-main w3-container" >
             <div class="w3-container" style="margin-left:230px; margin-top: 30px; text-align: justify;" >
@@ -99,84 +100,4 @@ export default {
 }
 </script>
 
-<style>
-body {
-  margin: 0;
-  overflow: hidden;
-}
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-.group {
-  border: .1px dotted #efefef;
-  height: 33vh;
-  min-height: 33vh;
-}
-
-.group:nth-child(even) {
-    background: #42b983a0;
-}
-
-.role {
-  transform: rotate(90deg);
-  position: relative;
-  top: 13vh;
-  right: 49%;
-}
-
-.current {
-  display: flex;
-  overflow: auto;
-  overflow-y: hidden;
-}
-
-.current--subordinate {
-  flex: 1;
-}
-
-.subordinates {
-  display: flex;
-  overflow: auto;
-  overflow-y: hidden;
-}
-
-::-webkit-scrollbar {
-  background: #CCF6ED;
-  border-radius: 4px;
-  height: 8px;
-  width: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #21BB9A;
-  border-radius: 4px;
-}
-
-.subordinate {
-  flex: 1;
-}
-
-.slide-fade-enter-active {
-  transition: all .5s ease .8s;
-}
-.slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-}
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: translateX(10px);
-  opacity: 0;
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity .1s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
-</style>
