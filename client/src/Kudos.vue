@@ -177,13 +177,13 @@ import axios from 'axios'
         img = Math.random();
         g.nodes.push({
           id: 'n' + i,
-          label: 'Node ' + i,
+          label: 'Oseba ' + i,
           type: img ? 'image' : 'def',
           url: img ? urls[Math.floor(Math.random() * urls.length)] : null,
-          x: 2+i/13,
-          y: i%2==0 ? i/10:i/20,
-          size: i+1,
-          color: '#4c9689'
+          x: 2+i/5,
+          y: i%2==0 ? i/13:2+i/17,
+          size: i%2==0 ? i+i/2:i/4,
+          color: '#4' + i + '9689'
         });
         console.log(Math.random());
       }
