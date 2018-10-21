@@ -1,189 +1,111 @@
-<template>
-  <div class="user">
-      <img :src="user.avatarUrl" alt="" class="image--cover" :class="{ 'active': status }"/>
-      <p>{{ user.firstName }} {{ user.lastName }}</p>
-      <img src="https://professionalorganizeraz.com/wp-content/uploads/2016/02/Kudos-300x300.png" class="kudos" @click.stop="showKudos = true"></img>
-      <p class="job">{{ user.jobTitle }}</p>
-      <span ref="dot" v-for="(item, index) in user.subordinates" class="dot"
-        :style="`transform: rotate(${defaultTransform - index * 10 + (10 * user.subordinates.length / 2)}deg ) translate(90px);`">
-      </span>
 
-      <kudos :userId="user.id" v-if="showKudos" @close="showKudos = false"/>
-  </div>
+<template>
+  <div id="app">
+   
+
+    <div class="w3-sidebar sidebar w3-beige w3-bar-block w3-card sides2" style="width:20%; right:0;" id="mySidebar">
+      <a href=""><span><b>Kudos of the month</b></span></a>
+        <ul class="info2 received2">
+            <li><img src="pics/profile2.jpg"><b>50 kudos</b><a href="">#timotej</a></li>
+            <li><img src="pics/profile3.jpg"><b>45 kudos</b><a href="">#petra</a></li>
+            <li><img src="pics/profile4.jpg"><b>39 kudos</b><a href="">#ana</a></li>
+        </ul>
+      <a href=""><span><b>Live kudos</b></span></a>
+        <ul class="info2 received2">
+            <li><a href="">#timotej</a>Your ideas were really helpful! Many thanks!</li></li>
+            <li><a href="">#petra</a>Thank you for your help with database!</li></li>
+            <li><a href="">#tadej</a>With your knowledge we are able to save so much time!</li></li>
+          </ul>
+    </div>
+   
+    <!--user user-id="userId"></user-->
+
+    <div class="w3-main w3-container" >
+        <div class="w3-container" style="margin-left:230px; margin-top: 30px; text-align: justify;" >
+          <div class="one"><img src="pics/profile.jpg"></div>
+          <div class="two">
+            <h3><b>{{ `${selectedUser.firstName} ${selectedUser.lastName}` }}</b></h3>
+          <ul class="info">
+            <li>Celtra Ljubljana.</li>
+            <li>Project manager.</li>
+            <li>Always ready to help!</li>
+          </ul>
+        </div>
+        <h3><b>My projects</b></h3>
+        <div class="buttons">
+          <button>#celtra</button>
+          <button>#slack</button>
+          <button>#hackathon</button>
+        </div>
+        <h3><b>Received kudos</b></h3>
+          <ul class="info received">
+            <li><img src="pics/profile2.jpg"> <a href="">#hackathon</a>Your ideas were really helpful! Many thanks!</li>
+            <li><img src="pics/profile3.jpg"> <a href="">#celtra</a>Thank you for your help with database!</li>
+            <li><img src="pics/profile2.jpg"> <a href="">#hackathon</a>With your knowledge we are able to save so much time!</li>
+          </ul>
+        <h3><b>Given kudos</b></h3>
+          <ul class="info received">
+            <li><img src="pics/profile4.jpg"> <a href="">#celtra</a>Thank you for your help with frontend!</li>
+            <li><img src="pics/profile3.jpg"> <a href="">#hackathon</a>With your skills we are able to save so much time!</li>
+            <li><img src="pics/profile2.jpg"> <a href="">#hackathon</a>Your ideas were really helpful! So grateful!</li>
+          </ul>
+        </div>
+    </div>
+
+   </div>
 </template>
+
 
 <script>
 import axios from 'axios'
-import User from './User'
-import Kudos from './Kudos' // to kar tle importaš morš dodat v components spodi
 
 export default {
-  name: 'user',
-  components: {
-    'user' : User,
-    'kudos' : Kudos
-  },
-  props: {
-    userId: {
-      default: '',
-      type: String
-    },
-    status: {
-      default: false,
-      type: Boolean
-    }
-  },
-  created () {
-    var that = this
-    axios.get(`/api/employees/${this.userId}`).then(function (response) {
-        that.user = response.data
-
-        that.$nextTick().then(function () {
-          if (that.status) {
-            var circles = that.$refs.dot || 0
-
-            for (var i = 0; i < circles.length; i++) {
-              var circle = circles[i]
-              var xMax = 500;
-              var yMax = 300;
-              var t = -95 - i * 10 + (10 * circles.length / 2)
-
-              circle.keyframes = [{
-                opacity: 0,
-                transform: `rotate(${t}0deg) translate(-90px) rotate(${t}deg)`
-              }, {
-                opacity: 1,
-                transform: `rotate(${t + 180}deg) translate(-90px) rotate(${t + 180}deg)`
-              }];
-
-              circle.animProps = {
-                duration: 1000,
-                easing: "cubic-bezier(0.42, 0, 0.58, 1)",
-                iterations: 1
-              }
-
-              var animationPlayer = circle.animate(circle.keyframes, circle.animProps);
-            }
-          }
-        })
-    })
-  },
+  name: 'User',
   data () {
     return {
-      isLoading: true,
-      user: {},
-      showKudos: false
+      rootId: null,
+      manager: {},
+      selectedUser: {},
+      isLoading: true
     }
+  },
+  mounted () {
+  // tuki greš iskat u bazo stvari, potem jih bindaš na this.neki(npr. product)
+    var that = this
+
+    axios.get(`/api/boss`).then(function (response) {
+      that.rootId = response.data.id
+
+      axios.get(`/api/employees/${that.rootId}`).then(function (response) {
+        that.manager = response.data
+        that.userId = response.data.subordinates[0];
+        that.getUser(response.data.subordinates[0])
+      })
+    })
   },
   methods: {
-    select (userId) {
-      if (this.user.subordinates.length > 0) {
-        this.$root.$emit('select-user', userId)
+    setActiveUser (userId, managerId) {
+      if (managerId) {
+        axios.get(`/api/employees/${managerId}`).then(function (response) {
+          this.manager = response.data
+          this.getUser(userId)
+        }.bind(this))
       }
-    }
-  },
-  computed: {
-    defaultTransform: function () {
-      return this.status ? -275 : -95
-    }
-  },
-  watch: {
-    userId: function(newVal, oldVal) {
-      axios.get(`/api/employees/${newVal}`).then(function (response) {
-        this.user = response.data
-      }.bind(this))
     },
-    status: function(newVal, _) {
-      var circles = this.$refs.dot
-
-      if (!!circles) {
-        for (var i = 0; i < circles.length; i++) {
-          var circle = circles[i]
-          var t = -95 - i * 10 + (10 * circles.length / 2)
-
-          circle.keyframes = [{
-            opacity: 0.5,
-            transform: `rotate(${t + 180}deg) translate(-90px) rotate(${t + 180}deg)`
-          }, {
-            opacity: 1,
-            transform: `rotate(${t}deg) translate(-90px) rotate(${t}deg)`
-          }]
-
-          circle.animProps = {
-            duration: 1000,
-            easing: "ease-in-out",
-            iterations: 1
-          }
-
-          if (newVal) {
-            circle.animate(circle.keyframes, circle.animProps)
-          } else {
-            circle.animate(circle.keyframes, circle.animProps).reverse()
-          }
-        }
-      }
+    getUser (userId) {
+      axios.get(`/api/employees/${userId}`).then(function (response) {
+        this.selectedUser = response.data
+        this.isLoading = false
+      }.bind(this))
+    }
+  },
+  filters: {
+    uppercase: function (value) {
+      if (!value) return ''
+      return value.toUpperCase()
     }
   }
 }
 </script>
 
-<style>
-.image--cover {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  margin: 20px;
 
-  object-fit: cover;
-  object-position: center right;
-
-  border: 8px solid #616161;
-  opacity: 0.3;
-}
-
-.active {
-  border: 8px solid #42b983;
-  opacity: 1;
-}
-
-.user {
-  position:relative;
-}
-
-.dot {
-  height: 7px;
-  width: 7px;
-  background-color: #42b983;
-  border-radius: 50%;
-  display: block;
-  position: absolute;
-  overflow: hidden;
-  top: 50%;
-  left: 50%;
-  margin: -44px -3px;
-  z-index: 5;
-}
-
-.kudos {
-  float: left;
-  position: absolute;
-  left: 0;
-  right: -165px;
-  top: 10px;
-  margin: auto;
-  height: 2em;
-  width: 2em;
-  text-align: center;
-}
-
-.job {
-  background: #42b983;
-  text-align: center;
-  border-radius: 30px 30px 30px 30px;
-  color: white;
-  padding: 5px 10px;
-  font-weight: 900;
-  width: fit-content;
-  margin: auto;
-}
-</style>

@@ -1,119 +1,188 @@
+
 <template>
   <div id="app">
-    <div class="w3-sidebar w3-text-white sidebar w3-purple w3-bar-block sides" id="mySidebar">
-      <a href="" style="font-size: 40px;"><b><span>#kudos</span></b></a>
-      <a href=""><span>My profile</span></a>
-      <a href="" style="color: lightgray"><span>Visualization</span></a>
+    <div class="w3-sidebar sidebar w3-beige w3-bar-block w3-card sides2" style="width:20%; right:0;" id="mySidebar">
+      <a href=""><span><b>Kudos of the month</b></span></a>
+        <ul class="info2 received2">
+            <li><img src="pics/profile2.jpg"><b>50 kudos</b><a href="">#timotej</a></li>
+            <li><img src="pics/profile3.jpg"><b>45 kudos</b><a href="">#petra</a></li>
+            <li><img src="pics/profile4.jpg"><b>39 kudos</b><a href="">#ana</a></li>
+        </ul>
+      <a href=""><span><b>Live kudos</b></span></a>
+        <ul class="info2 received2">
+            <li><a href="">#timotej</a>Your ideas were really helpful! Many thanks!</li></li>
+            <li><a href="">#petra</a>Thank you for your help with database!</li></li>
+            <li><a href="">#tadej</a>With your knowledge we are able to save so much time!</li></li>
+          </ul>
     </div>
-
-    <kudos></kudos>
-
-    <div class="w3-main w3-container" >
-        <div class="w3-container" style="margin-left:230px; margin-top: 30px; text-align: justify;" >
-          <div class="one"><img src="pics/profile.jpg"></div>
-          <div class="two">
-            <h3><b>{{ `${selectedUser.firstName} ${selectedUser.lastName}` }}</b></h3>
-          <ul class="info">
-            <li>Celtra Ljubljana.</li>
-            <li>Project manager.</li>
-            <li>Always ready to help!</li>
-          </ul>
-        </div>
-        <h3><b>My projects</b></h3>
-        <div class="buttons">
-          <button>#celtra</button>
-          <button>#slack</button>
-          <button>#hackathon</button>
-        </div>
-        <h3><b>Received kudos</b></h3>
-          <ul class="info received">
-            <li><img src="pics/profile2.jpg"> <a href="">#hackathon</a>Your ideas were really helpful! Many thanks!</li>
-            <li><img src="pics/profile3.jpg"> <a href="">#celtra</a>Thank you for your help with database!</li>
-            <li><img src="pics/profile2.jpg"> <a href="">#hackathon</a>With your knowledge we are able to save so much time!</li>
-          </ul>
-        <h3><b>Given kudos</b></h3>
-          <ul class="info received">
-            <li><img src="pics/profile4.jpg"> <a href="">#celtra</a>Thank you for your help with frontend!</li>
-            <li><img src="pics/profile3.jpg"> <a href="">#hackathon</a>With your skills we are able to save so much time!</li>
-            <li><img src="pics/profile2.jpg"> <a href="">#hackathon</a>Your ideas were really helpful! So grateful!</li>
-          </ul>
-        </div>
+    <div id="container">
+      <div id="graph-container">
+      </div>
     </div>
   </div>
 </template>
-
 <script>
-import axios from 'axios'
-import Kudos from './Kudos'
-
-export default {
-  name: 'kudos',
-  props: {
-    userId: {
-      default: '',
-      type: String
-    }
-  },
-  created () {
-    var that = this
-    axios.get(`http://localhost:5001/api/kudos?beneficiaryId=${this.userId}`).then(function (response) {
-      that.kudos = response.data
-      that.$el.focus()
-    })
-  },
+  export default {
+  name: 'Kudos',
   data () {
     return {
-      kudos: [],
+      rootId: null,
+      manager: {},
+      selectedUser: {},
+      isLoading: true
     }
   },
-  methods: {
-    close (event) {
-      this.$emit('close')
+  mounted () {
+    sigma.utils.pkg('sigma.canvas.nodes');
+    sigma.canvas.nodes.image = (function() {
+      var _cache = {},
+          _loading = {},
+          _callbacks = {};
+
+      var renderer = function(node, context, settings) {
+        var args = arguments,
+            prefix = settings('prefix') || '',
+            size = node[prefix + 'size'],
+            color = node.color || settings('defaultNodeColor'),
+            url = node.url;
+
+        if (_cache[url]) {
+          context.save();
+          context.beginPath();
+          context.arc(
+            node[prefix + 'x'],
+            node[prefix + 'y'],
+            node[prefix + 'size'],
+            0,
+            Math.PI * 2,
+            true
+          );
+          context.closePath();
+          context.clip();
+          context.drawImage(
+            _cache[url],
+            node[prefix + 'x'] - size,
+            node[prefix + 'y'] - size,
+            2 * size,
+            2 * size
+          );
+
+          context.restore();
+          context.beginPath();
+          context.arc(
+            node[prefix + 'x'],
+            node[prefix + 'y'],
+            node[prefix + 'size'],
+            0,
+            Math.PI * 2,
+            true
+          );
+          context.lineWidth = size / 5;
+          context.strokeStyle = node.color || settings('defaultNodeColor');
+          context.stroke();
+        } else {
+          sigma.canvas.nodes.image.cache(url);
+          sigma.canvas.nodes.def.apply(
+            sigma.canvas.nodes,
+            args
+          );
+        }
+      };
+
+      renderer.cache = function(url, callback) {
+        if (callback)
+          _callbacks[url] = callback;
+
+        if (_loading[url])
+          return;
+
+        var img = new Image();
+
+        img.onload = function() {
+          _loading[url] = false;
+          _cache[url] = img;
+
+          if (_callbacks[url]) {
+            _callbacks[url].call(this, img);
+            delete _callbacks[url];
+          }
+        };
+
+        _loading[url] = true;
+        img.src = url;
+      };
+
+      return renderer;
+      })();
+
+      var i,
+          s,
+          img,
+          N = 10,
+          E = 20,
+          g = {
+            nodes: [],
+            edges: []
+          },
+          urls = [
+            'pics/profile.jpg',
+            'pics/profile2.jpg',
+            'pics/profile3.jpg',
+            'pics/profile4.jpg'
+          ],
+          loaded = 0,
+          colors = [
+            '#4c9689',
+            '#35b18a',
+            '#3480bb',
+            '#4d394b'
+          ];
+
+          var x;
+
+      for (i = 0; i < N; i++) {
+        img = Math.random();
+        g.nodes.push({
+          id: 'n' + i,
+          label: 'Node ' + i,
+          type: img ? 'image' : 'def',
+          url: img ? urls[Math.floor(Math.random() * urls.length)] : null,
+          x: 2+i/13,
+          y: i%2==0 ? i/10:i/20,
+          size: i+1,
+          color: '#4c9689'
+        });
+        console.log(Math.random());
+      }
+
+      for (i = 0; i < E; i++)
+        g.edges.push({
+          id: 'e' + i,
+          source: 'n' + (Math.random() * N | 0),
+          target: 'n' + (Math.random() * N | 0),
+          size: 10
+        });
+
+      urls.forEach(function(url) {
+        sigma.canvas.nodes.image.cache(
+          url,
+          function() {
+            if (++loaded === urls.length)
+              s = new sigma({
+                graph: g,
+                renderer: {
+                  container: document.getElementById('graph-container'),
+                  type: 'canvas'
+                },
+                settings: {
+                  minNodeSize: 20,
+                  maxNodeSize: 30,
+                }
+              });
+          }
+        );
+      });
     }
   }
-}
 </script>
 
-<style scoped>
-.overlay {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 99;
-  background: #000;
-  opacity: 0.2;
-}
-
-.kudos-list {
-  width: 600px;
-  height: auto;
-  margin: auto;
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 30%;
-  z-index: 100;
-  background: #fff;
-  pointer-events:none;
-}
-
-ul {
-  list-style: none;
-}
-
-li:nth-child(even) {
-  background: #42b983;
-}
-
-li:nth-child(odd) {
-  background: #00000022;
-}
-
-li {
-  padding: 10px;
-  width: 90%;
-  margin: 10px 10px 10px 0px;
-}
-</style>
