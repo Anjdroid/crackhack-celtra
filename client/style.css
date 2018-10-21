@@ -66,18 +66,18 @@ body{
 	margin-bottom: 20px;
 }
 
-.recived a{
+.received a{
 	color: #3480bb;
 	text-decoration: none;
 	margin: 0px 10px;
 }
 
-.recived img {
+.received img {
 	width: 5%;
 	border-radius: 5%;
 }
 
-.recived {
+.received {
 	list-style: none;
 	margin-left: -20px;
 }

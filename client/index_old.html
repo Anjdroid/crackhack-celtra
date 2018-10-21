@@ -19,12 +19,13 @@
         <div class="w3-container" style="margin-left:230px; margin-top: 30px; text-align: justify;" >
           <div class="one"><img src="pics/profile.jpg"></div>
           <div class="two">
-            <h3><b>Katarina Novak</b></h3>
-          <ul class="info">
-            <li>Celtra Ljubljana.</li>
-            <li>Project manager.</li>
-            <li>Always ready to help!</li>
-          </ul>
+            <h3><b>{{ `${selectedUser.firstName} {selectedUser.lastName}` }}</b></h3>
+            <ul class="info">
+              <li>Celtra Ljubljana.</li>
+              <li v-if="selectedUser.department" >Department: {{ `{selectedUser.department}` }}</li>
+              <li>Job title: {{ `{selectedUser.jobTitle}` }}</li>
+              <li>Always ready to help!</li>
+            </ul>
         </div>
         <h3><b>My projects</b></h3>
         <div class="buttons">

@@ -26,7 +26,7 @@ export default {
   },
   created () {
     var that = this
-    axios.get(`http://localhost:5001/api/kudos?beneficiaryId=${this.userId}`).then(function (response) {
+    axios.get(`http://localhost:5003/api/kudos?beneficiaryId=${this.userId}`).then(function (response) {
       that.kudos = response.data
       that.$el.focus()
     })
